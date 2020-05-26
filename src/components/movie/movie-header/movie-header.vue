@@ -29,15 +29,27 @@
     export default {
         data() {
             return {
-                name: localStorage.getItem('cinemaName'),
+                name: '',
                 placeholder: '请输入影片名称',
-				// #ifdef H5
+                // #ifdef H5
                 keyword: localStorage.getItem('sskey'),
-				// #endif
-				// #ifdef MP-WEIXIN
-                keyword: uni.getStorageSync('sskey')
-				// #endif
+                // #endif
+                // #ifdef MP-WEIXIN
+                keyword: uni.getStorageSync('sskey'),
+                // #endif
+                timer: null
             }
+        },
+        created() {
+            this.name = localStorage.getItem('cinemaName')
+
+            this.timer = setInterval(() => {
+                if (this.name == null) {
+                    this.name = localStorage.getItem('cinemaName')
+                } else {
+                    clearInterval(this.timer)
+				}
+            }, 500)
         },
         methods: {
             realIpt(e) {
@@ -45,18 +57,18 @@
                 // #ifdef MP-WEIXIN
                 this.ui.setStorage('sskey', e.detail.value)
                 // #endif
-				// #ifdef H5
+                // #ifdef H5
                 localStorage.setItem('sskey', e.detail.value)
-				// #endif
+                // #endif
             },
             // 执行搜索
             doSearch: tu.throttle(async function () {
-				console.log(uni.getStorageSync('sskey'))
+                console.log(uni.getStorageSync('sskey'))
                 // #ifdef MP-WEIXIN
                 if (uni.getStorageSync('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://123.0t038.cn/jin-61/0509gkl/515love/api/getDataInfo.php?keyword=${uni.getStorageSync('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${uni.getStorageSync('sskey')}&page=${this.$store.state.sspage}`)
                     this.ui.setStorage('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
@@ -68,7 +80,7 @@
                 if (localStorage.getItem('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://123.0t038.cn/jin-61/0509gkl/515love/api/getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
                     localStorage.setItem('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
@@ -82,8 +94,8 @@
                 if (uni.getStorageSync('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://123.0t038.cn/jin-61/0509gkl/515love/api/getDataInfo.php?keyword=${uni.getStorageSync('sskey')}&page=${this.$store.state.sspage}`)
-                   	this.ui.setStorage('ssData', JSON.stringify(data))
+                    const data = await publicGet(`getDataInfo.php?keyword=${uni.getStorageSync('sskey')}&page=${this.$store.state.sspage}`)
+                    this.ui.setStorage('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
                     this.router.push('/pages/index/movie/mvSearch')
@@ -94,7 +106,7 @@
                 if (localStorage.getItem('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://123.0t038.cn/jin-61/0509gkl/515love/api/getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
                     localStorage.setItem('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
@@ -104,7 +116,7 @@
             }, 2000),
         },
         computed: {
-            ...mapState(['ssData', 'ssKey', 'sspage']),
+            ...mapState(['ssData', 'ssKey', 'sspage', 'cinemaName']),
         },
     }
 </script>

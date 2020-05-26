@@ -1,5 +1,5 @@
 {
-    "name" : "主页",
+    "name" : "影视大全",
     "appid" : "",
     "description" : "应用描述",
     "versionName" : "1.0.0",
@@ -108,7 +108,7 @@
         "router" : {
 //            "mode" : "history",
             "mode" : "hash",
-            "base" : "/"
+            "base" : "jin-61/0526wjdy/"
         },
         "sdkConfigs" : {
             "maps" : {

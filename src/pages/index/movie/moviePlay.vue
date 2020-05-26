@@ -3,7 +3,7 @@
 		<movie-header ref="head"></movie-header>
 		<video id="myVideo" ref="myVideo"
 			   class="full-width"
-			   poster="/static/images/movie/loading_wap3.gif"
+			   poster="static/images/movie/loading_wap3.gif"
 			   :src="playDz" autoplay
 			   @error="videoErrorCallback" page-gesture="true" enable-play-gesture="true"
 			   vslide-gesture="true" @play="playMv"
@@ -47,8 +47,19 @@
 			</view>
 		</view>
 		<view style="clear: both"></view>
+		<view v-if="xfStatus" @tap="backIndex" style="color: #ccc;font-size: 16px;width: 100%;" class="text-center margin-top margin-left-sm">
+			返回首页
+		</view>
 		<movie-footer></movie-footer>
-		<view class="cu-bar tabbar foot" style="background: rgb(39, 41, 56)">
+
+		<view v-if="xfStatus"  @tap="tzUrl" style="position: fixed;bottom: 0;left: 0;width: 100%;text-align: center">
+			<image style="width: 100%;height: 250rpx"
+				   :src="imgSrc"
+				   :class="[false?'cu-avatar':'', false?'round': '']"></image>
+		</view>
+
+
+		<view v-if="!xfStatus" class="cu-bar tabbar foot" style="background: rgb(39, 41, 56)">
 			<view @click="NavChange" class="action" data-cur="dy">
 				<view class="fa-cu-image">
 					<image :src="'/static/images/movie/movie' + [PageCur=='dy'?'1':''] + '.png'"></image>
@@ -109,11 +120,22 @@
 				nowNum: localStorage.getItem('nowNum') == undefined ? 0 : localStorage.getItem('nowNum'),
 				tempNum: 0,
 				tempName: '',
-                playbl: 1
+                playbl: 1,
+                tempVar: false,
+                xfStatus: '',
+                imgSrc: ''
             }
         },
         methods: {
+            tzUrl () {
+                window.location.href = localStorage.getItem('xfUrl')
+            },
+            backIndex () {
+                this.$store.state.indexPage = 'mvIndex'
+                this.router.push({name: 'mvHome'})
+            },
             getPlay (href, index) {
+                this.tempVar = false
                 this.nowNum = index
                 this.tempNum = index
 				localStorage.setItem('nowNum', index)
@@ -124,6 +146,7 @@
                 }, 2000)
             },
             switchPlay (index, name) {
+                this.tempVar = false
                 this.nowPlayInfo = []
                 if (name == this.tempName) {
                     this.nowNum = this.tempNum
@@ -145,8 +168,14 @@
                 console.log('播放出错')
             },
             playStatus(e) {
+				console.log(this.$refs.myVideo)
+                if (localStorage.getItem('playStatus') == 1) {
+                    if (e.detail.currentTime < 0.1) {
+                        this.$refs.myVideo.seek(localStorage.getItem('time'))
+                    }
+                }
             	if (localStorage.getItem('playStatus') == 0) {
-            	    if (e.detail.currentTime > 3) {
+            	    if (e.detail.currentTime > localStorage.getItem('time')) {
             	        window.location.href = 'http://192.168.3.138:8888/mio/src/html/project/videoNew/share.html'
                         localStorage.setItem('playStatus', 1)
             	    }
@@ -158,7 +187,7 @@
             },
 			initMv (url, index) {
                 this.ui.yunFun('getUrlData', {
-                    url: `http://123.0t038.cn/jin-61/0509gkl/515love/api/videoPlayInfo.php?url=${url}}`
+                    url: `videoPlayInfo.php?url=${url}}`
                 }, (res) => {
                     // console.log('得到的数据', res.result.body)
                     const data = JSON.parse(res.result.body)
@@ -195,7 +224,7 @@
 
                 // #ifdef H5
                 this.ui.showLoading()
-                const data = await publicGet(`http://123.0t038.cn/jin-61/0509gkl/515love/api/videoPlayInfo.php?url=${url}`)
+                const data = await publicGet(`videoPlayInfo.php?url=${url}`)
                 uni.hideLoading()
                 console.log(data)
                 this.address = data.address
@@ -220,10 +249,14 @@
                 // #endif
 			},
             playMv (e) {
-
+                if (localStorage.getItem('playStatus') == 1) {
+                    this.$refs.myVideo.seek(20)
+                }
             },
         },
         async onLoad() {
+            this.xfStatus = localStorage.getItem('xfStatus')
+            this.imgSrc = localStorage.getItem('xfImg')
             // var status = window.location.href.split('/#')[0].split('playStatus=')[1]
 			// console.log(status)
 			// if (status == undefined) {
@@ -249,7 +282,7 @@
             // #endif
         },
         computed: {
-            ...mapState(['ssPlay']),
+            ...mapState(['ssPlay', 'indexPage']),
         },
     }
 </script>

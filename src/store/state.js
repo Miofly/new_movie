@@ -13,5 +13,6 @@ export default {
     ssKey: '',
     sspage: 1,
     ssUrl: '',
-    ssPlay: ''
+    ssPlay: '',
+    cinemaName: ''
 }

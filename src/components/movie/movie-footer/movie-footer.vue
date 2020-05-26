@@ -1,6 +1,6 @@
 <template>
 	<view style="background: rgb(30, 40, 40);">
-		<view class="padding-bottom-twenty margin-left margin-top" style="background: rgb(30, 40, 40);">
+		<view class="padding-bottom-forty margin-left margin-top" style="background: rgb(30, 40, 40);">
 			<view>
 				<view style="color: #ccc;font-size: 16px" class="margin-left">友情链接</view>
 				<view class="margin-top-sm" v-for="(item, index) in lists" :key="index" style="color: #999999;font-size: 14px">
@@ -27,15 +27,28 @@
     export default {
 		data () {
 		    return {
-		        lists: JSON.parse(localStorage.getItem('friend_link')),
+		        lists: '',
                 status: false,
-				src: localStorage.getItem('qrcode')
+				src: '',
+                timers: null
 		    }
+		},
+		created () {
+            this.lists = JSON.parse(localStorage.getItem('friend_link'))
+            this.src = localStorage.getItem('qrcode')
 
+            this.timers = setInterval(() => {
+                if (this.lists == null || this.src == null) {
+                    this.lists = JSON.parse(localStorage.getItem('friend_link'))
+                    this.src = localStorage.getItem('qrcode')
+                } else {
+                    clearInterval(this.timers)
+                }
+            }, 500)
 		},
 		methods: {
 		    tz (url) {
-		        window.location.href = 'http://' + url
+		        window.location.href = url
 		    },
             showImg () {
 				this.status = true

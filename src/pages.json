@@ -1,11 +1,11 @@
 {
     "pages": [
         {
-            "path": "pages/index/index",
-            "name": "index",
+            "path": "pages/index/movie/mvHome",
             "style": {
-                "navigationBarTitleText": "主页"
-            }
+                "navigationStyle": "custom"
+            },
+            "name": "mvHome"
         },
         {
             "path": "pages/index/movie/dm",
@@ -57,397 +57,11 @@
             "name": "mvIndex"
         },
         {
-            "path": "pages/index/movie/mvHome",
-            "style": {
-                "navigationStyle": "custom"
-            },
-            "name": "mvHome"
-        },
-        {
             "path": "pages/index/movie/zy",
             "style": {
                 "navigationStyle": "custom"
             },
             "name": "zy"
-        },
-
-        {
-            "path": "pages/index/tool/toolIndex",
-            "style": {},
-            "name": "toolIndex"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/animalDiscern",
-            "style": {},
-            "name": "animalDiscern"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/characterRecognition",
-            "style": {},
-            "name": "characterRecognition"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/commonImg",
-            "style": {},
-            "name": "commonImg"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/dishIdentification",
-            "style": {},
-            "name": "dishIdentification"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/faceRecognition",
-            "style": {},
-            "name": "faceRecognition"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/fruitAndVegetableIdentification",
-            "style": {},
-            "name": "fruitAndVegetableIdentification"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/landmarkIdentification",
-            "style": {},
-            "name": "landmarkIdentification"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/modelRecognition",
-            "style": {},
-            "name": "modelRecognition"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/plantDiscern",
-            "style": {},
-            "name": "plantDiscern"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/textSpot",
-            "style": {},
-            "name": "textSpot"
-        },
-        {
-            "path": "pages/index/tool/aiSpot/translate",
-            "style": {},
-            "name": "translate"
-        },
-        {
-            "path": "pages/index/tool/smallTolls/dream",
-            "style": {},
-            "name": "dream"
-        },
-        {
-            "path": "pages/index/tool/smallTolls/heightAndWeight",
-            "style": {},
-            "name": "heightAndWeight"
-        },
-        {
-            "path": "pages/index/tool/smallTolls/idCard",
-            "style": {},
-            "name": "idCard"
-        },
-        {
-            "path": "pages/index/tool/smallTolls/phone",
-            "style": {},
-            "name": "phone"
-        },
-        {
-            "path": "pages/index/tool/smallTolls/phoneInformation",
-            "style": {},
-            "name": "phoneInformation"
-        },
-        {
-            "path": "pages/index/tool/smallTolls/zipCode",
-            "style": {},
-            "name": "zipCode"
-        },
-        {
-            "path": "pages/index/tool/other/bjx",
-            "style": {},
-            "name": "bjx"
-        },
-        {
-            "path": "pages/index/tool/other/dzg",
-            "style": {},
-            "name": "dzg"
-        },
-        {
-            "path": "pages/index/tool/other/familyName",
-            "style": {},
-            "name": "familyName"
-        },
-        {
-            "path": "pages/index/tool/other/history",
-            "style": {},
-            "name": "history"
-        },
-        {
-            "path": "pages/index/tool/other/szj",
-            "style": {},
-            "name": "szj"
-        },
-
-        {
-            "path": "pages/index/song/song",
-            "style": {},
-            "name": "song"
-        },
-        {
-            "path": "pages/index/song/songList",
-            "style": {},
-            "name": "songList"
-        },
-        {
-            "path": "pages/index/lz/module/addItem",
-            "style": {},
-            "name": "addItem"
-        },
-        {
-            "path": "pages/index/lz/module/teamManage",
-            "style": {},
-            "name": "teamManage"
-        },
-        {
-            "path": "pages/index/lz/module/memberRank",
-            "style": {},
-            "name": "memberRank"
-        },
-        {
-            "path": "pages/index/lz/module/config",
-            "style": {},
-            "name": "config"
-        },
-        {
-            "path": "pages/index/lz/module/personCharts",
-            "style": {},
-            "name": "personCharts"
-        },
-        {
-            "path": "pages/index/lz/module/personsCharts",
-            "style": {},
-            "name": "personsCharts"
-        },
-        {
-            "path": "pages/index/lz/module/personInfos",
-            "style": {},
-            "name": "personInfos"
-        },
-        {
-            "path": "pages/index/itest",
-            "name": "itest",
-            "style": {
-                "navigationBarTitleText": "主页"
-            }
-        },
-        {
-            "path": "pages/index/chart/chartHome",
-            "name": "chartHome",
-            "style": {}
-        },
-        {
-            "path": "pages/index/chart/chartIndex",
-            "name": "chartIndex",
-            "style": {}
-        },
-        {
-            "path": "pages/index/chart/chartBar",
-            "name": "chartBar",
-            "style": {}
-        },
-        {
-            "path": "pages/index/chart/chartColumn",
-            "name": "chartColumn",
-            "style": {}
-        },
-        {
-            "path": "pages/index/chart/chartColumns",
-            "name": "chartColumns",
-            "style": {}
-        },
-        {
-            "path": "pages/index/chart/chartLine",
-            "name": "chartLine",
-            "style": {}
-        },
-        {
-            "path": "pages/index/chart/chartPie",
-            "name": "chartPie",
-            "style": {}
-        },
-        {
-            "path": "pages/index/time/timeHome",
-            "name": "timeHome",
-            "style": {}
-        },
-        {
-            "path": "pages/index/time/timeOne",
-            "name": "timeOne",
-            "style": {}
-        },
-        {
-            "path": "pages/index/time/timeTwo",
-            "name": "timeTwo",
-            "style": {}
-        },
-        {
-            "path": "pages/index/time/timeThree",
-            "name": "timeThree",
-            "style": {}
-        },
-        {
-            "path": "pages/index/loadRefresh/loadHome",
-            "name": "loadHome",
-            "style": {}
-        },
-        {
-            "path": "pages/index/loadRefresh/loadOne",
-            "name": "loadOne",
-            "style": {}
-        },
-        {
-            "path": "pages/index/loadRefresh/loadTwo",
-            "name": "loadTwo",
-            "style": {
-                "enablePullDownRefresh": false
-            }
-        },
-        {
-            "path": "pages/index/loadRefresh/loadThree",
-            "name": "loadThree",
-            "style": {}
-        },
-        {
-            "path": "pages/index/loadRefresh/loadFour",
-            "name": "loadFour",
-            "style": {}
-        },
-        {
-            "path": "pages/index/lz/index/index",
-            "name": "lz_index",
-            "style": {
-                "navigationStyle": "custom"
-            }
-        },
-        {
-            "path": "pages/index/lz/index/team",
-            "name": "lz_team",
-            "style": {
-                "navigationStyle": "custom"
-            }
-        },
-        {
-            "path": "pages/index/lz/index/user",
-            "name": "lz_user",
-            "style": {
-                "navigationStyle": "custom"
-            }
-        },
-        {
-            "path": "pages/index/lz/index/rank",
-            "name": "lz_rank",
-            "style": {
-                "navigationStyle": "custom"
-            }
-        },
-        {
-            "path": "pages/index/lz/index/home",
-            "name": "lz_home",
-            "style": {
-                "navigationStyle": "custom"
-            }
-        },
-        {
-            "path": "pages/index/login/login",
-            "name": "login",
-            "style": {}
-        },
-        {
-            "path": "pages/index/login/forget",
-            "name": "forget",
-            "style": {}
-        },
-        {
-            "path": "pages/index/login/reg",
-            "name": "reg",
-            "style": {}
-        },
-        {
-            "path": "pages/module/avatar",
-            "name": "avatar",
-            "style": {}
-        },
-        {
-            "path": "pages/module/button",
-            "name": "button",
-            "style": {}
-        },
-        {
-            "path": "pages/module/fab",
-            "name": "fab",
-            "style": {}
-        },
-        {
-            "path": "pages/module/footBar",
-            "name": "footBar",
-            "style": {}
-        },
-        {
-            "path": "pages/module/home",
-            "name": "home",
-            "style": {}
-        },
-        {
-            "path": "pages/module/list",
-            "name": "list",
-            "style": {}
-        },
-        {
-            "path": "pages/module/scrollMessage",
-            "name": "scrollMessage",
-            "style": {}
-        },
-        {
-            "path": "pages/module/messTip",
-            "name": "messTip",
-            "style": {}
-        },
-        {
-            "path": "pages/module/modal",
-            "name": "modal",
-            "style": {}
-        },
-        {
-            "path": "pages/module/nav",
-            "name": "nav"
-        },
-        {
-            "path": "pages/module/webview",
-            "name": "webview"
-        },
-        {
-            "path": "pages/module/test",
-            "name": "test",
-            "style": {}
-        },
-        {
-            "path": "pages/plugin/home",
-            "name": "phome",
-            "style": {}
-        },
-        {
-            "path": "pages/setting/home",
-            "name": "shome",
-            "style": {}
-        },
-        {
-            "path": "pages/user/home",
-            "name": "uhome",
-            "style": {}
-        },
-        {
-            "path": "pages/index/home",
-            "name": "ihome",
-            "style": {}
         }
     ],
     "globalStyle": {
@@ -464,10 +78,6 @@
             {
                 "name": "test",
                 "path": "pages/index/movie/mvHome"
-            },
-            {
-                "name": "list",
-                "path": "pages/index/song/songList"
             }
         ]
     },
@@ -483,24 +93,24 @@
         "borderStyle": "black",
         "backgroundColor": "#ffffff",
         "list": [
-            {
-                "pagePath": "pages/index/lz/index/index",
-                "iconPath": "static/images/lz/home.png",
-                "selectedIconPath": "static/images/lz/home_blue.png",
-                "text": "主页"
-            },
-            {
-                "pagePath": "pages/index/lz/index/team",
-                "iconPath": "static/images/lz/team.png",
-                "selectedIconPath": "static/images/lz/team_blue.png",
-                "text": "团队"
-            },
-            {
-                "pagePath": "pages/index/lz/index/user",
-                "iconPath": "static/images/lz/user.png",
-                "selectedIconPath": "static/images/lz/user_blue.png",
-                "text": "我的"
-            }
+//            {
+//                "pagePath": "pages/index/lz/index/index",
+//                "iconPath": "static/images/lz/home.png",
+//                "selectedIconPath": "static/images/lz/home_blue.png",
+//                "text": "主页"
+//            },
+//            {
+//                "pagePath": "pages/index/lz/index/team",
+//                "iconPath": "static/images/lz/team.png",
+//                "selectedIconPath": "static/images/lz/team_blue.png",
+//                "text": "团队"
+//            },
+//            {
+//                "pagePath": "pages/index/lz/index/user",
+//                "iconPath": "static/images/lz/user.png",
+//                "selectedIconPath": "static/images/lz/user_blue.png",
+//                "text": "我的"
+//            }
         ]
     }
 }

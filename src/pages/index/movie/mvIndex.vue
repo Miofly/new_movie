@@ -145,12 +145,15 @@
             },
         },
         async mounted() {
+            console.log(23)
+
             localStorage.removeItem('nowNum')
+            localStorage.removeItem('sskey')
 
             // #ifdef MP-WEIXIN
 			this.getStorage()
             this.ui.yunFun('getUrlData', {
-                url: 'http://123.0t038.cn/jin-61/0509gkl/515love/api/getHomeInfo.php'
+                url: 'getHomeInfo.php'
             }, (res) => {
                 // console.log('得到的数据', res.result.body)
                 const data = res.result.body
@@ -167,7 +170,7 @@
             // #endif
             // #ifdef H5
             this.ui.showLoading()
-            const data = await publicGet('http://123.0t038.cn/jin-61/0509gkl/515love/api/getHomeInfo.php')
+            const data = await publicGet('getHomeInfo.php')
             uni.hideLoading()
             const $ = cheerio.load(data, {_useHtmlParser2: true})
 

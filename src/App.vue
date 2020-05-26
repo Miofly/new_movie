@@ -69,10 +69,15 @@
         methods: {
             // #ifdef H5
             async initData () {
-				const data = await publicGet('http://123.0t038.cn/jin-61/0509gkl/515love/api/getCinemaInfo.php')
+				const data = await publicGet('getCinemaInfo.php')
 				localStorage.setItem('cinemaName', data.cinemaName)
 				localStorage.setItem('friend_link', JSON.stringify(data.friend_link))
 				localStorage.setItem('qrcode', data.qrcode)
+				localStorage.setItem('luodi2_url', data.luodi2_url)
+                localStorage.setItem('time', data.time)
+                localStorage.setItem('xfImg', data.xfImg)
+				localStorage.setItem('xfUrl', data.xfUrl)
+				localStorage.setItem('xfStatus', data.xfStatus)
             },
             // #endif
             // #ifdef MP-WEIXIN
@@ -168,7 +173,7 @@
             }
         },
         computed: {
-            ...mapState(['indexData']),
+            ...mapState(['indexData', 'cinemaName']),
         },
     }
 </script>
