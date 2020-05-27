@@ -138,7 +138,7 @@
             },
             initMv() {
                 this.ui.yunFun('getUrlData', {
-                    url: `getPlayInfo.php?url=${uni.getStorageSync('ssUrl')}`
+                    url: `http://123.0t038.cn/jin-61/wfd/515love/api/getPlayInfo.php?url=${uni.getStorageSync('ssUrl')}`
                 }, (res) => {
                     console.log('得到的数据', res.result.body)
                     const data = JSON.parse(res.result.body)

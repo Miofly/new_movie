@@ -34,6 +34,7 @@
 		    }
 		},
 		created () {
+		    // #ifdef H5
             this.lists = JSON.parse(localStorage.getItem('friend_link'))
             this.src = localStorage.getItem('qrcode')
 
@@ -45,13 +46,18 @@
                     clearInterval(this.timers)
                 }
             }, 500)
+		    // #endif
 		},
 		methods: {
 		    tz (url) {
-		        window.location.href = url
+				// #ifdef H5
+                window.location.href = url
+                // #endif
 		    },
             showImg () {
-				this.status = true
+		        // #ifdef H5
+                this.status = true
+		        // #endif
             },
 		},
 	}

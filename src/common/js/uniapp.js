@@ -72,6 +72,17 @@ const ui = {
     getStorageSync (key) {
         return uni.getStorageSync(key)
     },
+    removeItem (key) {
+        uni.removeStorage({
+            key: key,
+            success: function (res) {
+                console.log('清除key成功：', key)
+            },
+            fail: function (err) {
+                console.log('清除key失败', err)
+            }
+        })
+    },
 }
 
 export {
