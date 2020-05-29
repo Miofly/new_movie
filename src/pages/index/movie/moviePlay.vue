@@ -74,6 +74,8 @@
 		</view>
 
 
+
+
 		<view v-if="!xfStatus" class="cu-bar tabbar foot" style="background: rgb(39, 41, 56)">
 			<view @click="NavChange" class="action" data-cur="dy">
 				<view class="fa-cu-image">
@@ -319,7 +321,15 @@
                 localStorage.setItem('xfUrl', data.xfUrl)
                 localStorage.setItem('xfStatus', data.xfStatus)
 
-                this.xfStatus = localStorage.getItem('xfStatus')
+
+				if (localStorage.getItem('xfStatus') == 'false') {
+                    this.xfStatus = false
+                }
+
+                if (localStorage.getItem('xfStatus') == 'true') {
+                    this.xfStatus = true
+                }
+
                 this.imgSrc = localStorage.getItem('xfImg')
 
                 this.nowNum = localStorage.getItem('nowNum') == undefined ? 0 : localStorage.getItem('nowNum')
@@ -329,7 +339,7 @@
                     localStorage.setItem('nowNum', 0)
                 }
 
-
+				console.log(this.xfStatus)
                 this.getPlayAll(localStorage.getItem('ssPlay'))
             },
         },
