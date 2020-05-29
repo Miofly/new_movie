@@ -9,6 +9,7 @@
 				   :adjust-position="false" type="text"
 				   :placeholder=placeholder
 				   confirm-type="search"
+				   @click.stop="test"
 				   @search="doSearchTwo()"
 				   style="background: white;color: black;height: 60rpx;width: 430rpx;
 				   border-radius: 20px;text-indent: 2px;
@@ -59,6 +60,9 @@
             // #endif
         },
         methods: {
+            test () {
+                console.log(1)
+            },
             realIpt(e) {
                 // #ifdef MP-WEIXIN
                 this.ui.setStorage('sskey', e.detail.value)
