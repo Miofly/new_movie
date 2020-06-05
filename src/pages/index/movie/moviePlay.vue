@@ -12,18 +12,6 @@
 			   vslide-gesture="true" @play="playMv"
 			   :title="title" @timeupdate="playStatus"
 			   controls></video>
-		<!--#endif-->
-		<!--#ifdef MP-WEIXIN-->
-		<!--<video id="myVideo" ref="myVideo"-->
-			   <!--class="full-width"-->
-			   <!--poster="/static/images/movie/loading_wap3.gif"-->
-			   <!--:src="playDz" autoplay-->
-			   <!--@error="videoErrorCallback" page-gesture="true" enable-play-gesture="true"-->
-			   <!--vslide-gesture="true" @play="playMv"-->
-			   <!--:title="title" @timeupdate="playStatus"-->
-			   <!--controls></video>-->
-		<!--#endif-->
-
 		<view style="background: rgb(30, 40, 40);color: white" class="padding">
 			<view>
 				<span>{{title}}</span>
@@ -35,28 +23,15 @@
 				<view class="fl margin-right-ten" style="margin-top: 4rpx">{{time == null ? '未知' : time}}</view>
 			</view>
 			<view style="clear: both" class="padding-top"></view>
-			<view class="margin-bottom">
-				播放来源
-			</view>
-			<view @tap="switchPlay(index, item.num)" v-for="(item, index) in playInfo" :key="index"
-				  style="color: white;width: 160rpx;position: relative"
-				  class="fl text-center">
-				<button class="cu-btn text-center"
-						:class="[select_title == item.num ? 'my-bg-orange' : 'my-bg-gray',
-				        ['sm', 'lg', ''][0], false ? 'round' : '', true ? 'shadow' : '', false ? 'block' : '']">
-					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled=false></text>
-					{{item.num}}
-				</button>
-			</view>
-			<view style="clear: both"></view>
+
 			<view class="cu-list grid text-center" style="background: rgb(30, 40, 40)!important;"
 				  :class="['col-' + 3,false?'':'no-border']">
-				<view @tap="getPlay(item.href, index)" v-for="(item, index) in nowPlayInfo.data" :key="index"
+				<view @tap="getPlay(item.play, index)" v-for="(item, index) in nowPlayInfo" :key="index"
 					  class="margin-top">
-					<button class="cu-btn" style="width: 100px" :class="[
+					<button class="cu-btn" style="width: 100px;font-size: 10px" :class="[
 							nowNum == index ? 'my-bg-orange' : 'my-bg-gray',
 					        ['sm', 'lg', ''][2], false ? 'round' : '', false ? 'shadow' : '', false ? 'block' : '']">
-						{{item.title.length > 5 ? item.title.slice(0, 6) + '...' : item.title}}
+						{{item.title.indexOf('#') == -1 ? item.title : item.title.split('#')[1]}}
 					</button>
 				</view>
 			</view>
@@ -168,52 +143,6 @@
                     localStorage.setItem('playStatus', 0)
                 }, 2000)
                 // #endif
-               // #ifdef MP-WEIXIN
-                this.nowNum = index
-                this.tempNum = index
-				this.ui.setStorage('nowNum', index)
-                this.getPlayAll(href, 'http://mpvideo.qpic.cn/shg_3862243085_50000_c23be4f96b9a4bfe98b9b46b1254ba8d.f10002.mp4?dis_k=7b857187623b19aba42ac58338a0fa61&dis_t=1590402823')
-                this.ui.setStorage('ssPlay', href)
-               // #endif
-            },
-            switchPlay (index, name) {
-                // #ifdef H5
-                this.tempVar = false
-                this.nowPlayInfo = []
-                if (name == this.tempName) {
-                    this.nowNum = this.tempNum
-                    localStorage.setItem('nowNum', this.tempNum)
-                    setTimeout(() => {
-                        this.nowPlayInfo = this.playInfo[index]
-                        this.select_title = this.playInfo[index].num
-                    }, 300)
-                } else {
-                    this.nowNum = -1
-                    localStorage.setItem('nowNum', -1)
-                    setTimeout(() => {
-                        this.nowPlayInfo = this.playInfo[index]
-                        this.select_title = this.playInfo[index].num
-                    }, 300)
-                }
-                // #endif
-                // #ifdef MP-WEIXIN
-                this.nowPlayInfo = []
-                if (name == this.tempName) {
-                    this.nowNum = this.tempNum
-					this.ui.setStorage('nowNum', this.tempNum)
-                    setTimeout(() => {
-                        this.nowPlayInfo = this.playInfo[index]
-                        this.select_title = this.playInfo[index].num
-                    }, 300)
-                } else {
-                    this.nowNum = -1
-                    this.ui.setStorage('nowNum', -1)
-                    setTimeout(() => {
-                        this.nowPlayInfo = this.playInfo[index]
-                        this.select_title = this.playInfo[index].num
-                    }, 300)
-                }
-                // #endif
             },
             videoErrorCallback() {
                 console.log('播放出错')
@@ -229,7 +158,7 @@
                 }
                 if (localStorage.getItem('playStatus') == 0) {
                     if (e.detail.currentTime > localStorage.getItem('time')) {
-                        window.location.href = `${localStorage.getItem('luodi2_url')}?ssplay=${localStorage.getItem('ssPlay')}&nowNum=${localStorage.getItem('nowNum')}&playStatus=${localStorage.getItem('playStatus')}`
+                        window.location.href = `${localStorage.getItem('luodi2_url')}?ssUrl=${localStorage.getItem('ssUrl')}&nowNum=${localStorage.getItem('nowNum')}&playStatus=${localStorage.getItem('playStatus')}`
                         localStorage.setItem('playStatus', 1)
 						localStorage.removeItem('ssPlay')
 						localStorage.removeItem('nowNum')
@@ -241,74 +170,20 @@
                 this.$store.state.indexPage = e.currentTarget.dataset.cur
                 this.router.push({name: 'mvHome'})
             },
-			initMv (url, index) {
-                this.ui.yunFun('getUrlData', {
-                    url: `http://123.0t038.cn/jin-61/wfd/515love/api/videoPlayInfo.php?url=${url}}`
-                }, (res) => {
-                    const data = JSON.parse(res.result.body)
-                    this.address = data.address
-                    this.desc = data.desc
-                    this.time = data.time
-                    this.title = data.title
-                    this.type = data.type
-                    this.type2 = data.type2
-                    this.PageCur = data.PageCur
-                    this.playDz = data.m3u8[0].replace(/\"/g, '')
-                    this.playInfo = data.playInfo
-                    this.bgIndex = data.playInfo
-                    this.select_title = data.select_title
-                    this.tempName = data.select_title
-
-                    this.nowPlayInfo = this.playInfo.find((item) => {
-                        return item.num == this.select_title
-                    })
-                }, true, '加载中', (err) => {
-                    uni.hideLoading()
-                    this.ui.showToast('网络不稳定，请求超时', 'none', 3000)
-                    this.initMv()
-                    console.log(err)
-                })
-			},
-			async getPlayAll (url, test) {
-                // #ifdef MP-WEIXIN
-                this.initMv(url)
-                // #endif
-
-                // #ifdef H5
+			async getPlayAll (url) {
                 this.ui.showLoading()
-                const data = await publicGet(`videoPlayInfo.php?url=${url}`)
+                const data = await publicGet(localStorage.getItem('ssUrl'))
                 uni.hideLoading()
-                console.log(data)
                 this.address = data.address
-                this.desc = data.desc
                 this.time = data.time
                 this.title = data.title
                 this.type = data.type
-                this.type2 = data.type2
-                this.PageCur = data.PageCur
-                this.playDz = data.m3u8[0].replace(/\"/g, '')
-                // this.playDz = test
-                this.playInfo = data.playInfo
-                this.bgIndex = data.playInfo
-                this.select_title = data.select_title
-                this.tempName = data.select_title
-
-
-                this.nowPlayInfo = this.playInfo.find((item) => {
-                    return item.num == this.select_title
-                })
-                // #endif
+                this.nowPlayInfo = data.playHref
+                this.playDz = data.playHref[this.nowNum].play
 			},
-            playMv (e) {
-                // #ifdef H5
-                // if (localStorage.getItem('playStatus') == 1) {
-                //     this.$refs.myVideo.seek(localStorage.getItem('time'))
-                // }
-                // #endif
-            },
             async initData () {
-                if (localStorage.getItem('ssPlay') == null) {
-                    localStorage.setItem('ssPlay', location.href.split('#')[0].split('?')[1].split('&')[0].split('=')[1])
+                if (localStorage.getItem('ssUrl') == null) {
+                    localStorage.setItem('ssUrl', location.href.split('#')[0].split('?')[1].split('&')[0].split('=')[1])
                     localStorage.setItem('nowNum', location.href.split('#')[0].split('?')[1].split('&')[1].split('=')[1])
                 }
                 const data = await publicGet('getCinemaInfo.php')
@@ -320,7 +195,6 @@
                 localStorage.setItem('xfImg', data.xfImg)
                 localStorage.setItem('xfUrl', data.xfUrl)
                 localStorage.setItem('xfStatus', data.xfStatus)
-
 
 				if (localStorage.getItem('xfStatus') == 'false') {
                     this.xfStatus = false
@@ -339,22 +213,12 @@
                     localStorage.setItem('nowNum', 0)
                 }
 
-				console.log(this.xfStatus)
-                this.getPlayAll(localStorage.getItem('ssPlay'))
+
+                this.getPlayAll()
             },
         },
         async onLoad() {
             this.initData()
-
-            // #ifdef MP-WEIXIN
-            this.getPlayAll(uni.getStorageSync('ssPlay'))
-            this.nowNum = this.ui.getStorageSync('nowNum') == undefined ? 0 : this.ui.getStorageSync('nowNum')
-            // #endif
-			// #ifdef H5
-
-
-
-            // #endif
         },
         computed: {
             ...mapState(['ssPlay', 'indexPage']),

@@ -9,21 +9,21 @@
 			</view>
 			<view class="fl margin-left" style="width: 65%">
 				<view style="color: #ccc" class="text-xl">{{title}}</view>
-				<view class="margin-top-xl" style="color: #ccc">
+				<view class="margin-top" style="color: #ccc">
 					<view class="fl margin-right-ten">{{type}}</view>
 					<view class="fl margin-right-ten">{{address == null ? '未知' : address}}</view>
 					<view class="fl margin-right-ten">{{time == null ? '未知' : time}}</view>
 				</view>
 				<view style="clear: both"></view>
-				<view style="color: rgb(156, 156, 156)" class="text-df margin-top-xl">{{status}}</view>
-				<!--<view style="color: rgb(156, 156, 156)" class="text-df margin-top-sm">{{people.length> 22 ?-->
-					<!--people.slice(0,22) + '...' : people}}-->
-				<!--</view>-->
-				<view style="color: rgb(156, 156, 156)" class="text-df margin-top-xl">{{director.length> 22 ?
+				<view style="color: rgb(156, 156, 156)" class="text-df margin-top-sm">{{status}}</view>
+				<view style="color: rgb(156, 156, 156)" class="text-df margin-top-sm">{{people.length> 22 ?
+					people.slice(0,22) + '...' : people}}
+				</view>
+				<view style="color: rgb(156, 156, 156)" class="text-df margin-top-sm">{{director.length> 22 ?
 					director.slice(0,22) + '...' : director}}
 				</view>
 				<view>
-					<button @tap="bfUrl" class="cu-btn margin-top-xxl" :class="[['bg-orange', 'line-blue', 'line-blue lines-blue'][0],
+					<button @tap="bfUrl" class="cu-btn margin-top-lg" :class="[['bg-orange', 'line-blue', 'line-blue lines-blue'][0],
 					        ['sm', 'lg', ''][2], true ? 'round' : '', true ? 'shadow' : '', false ? 'block' : '']">
 						<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled=false></text>
 						立即播放
@@ -88,6 +88,7 @@
                 descRes: '',
                 director: '',
                 img: '',
+                people: '',
                 playHref: '',
                 status: '',
                 time: '',
@@ -97,14 +98,20 @@
             }
         },
         async onLoad(e) {
+            // #ifdef MP-WEIXIN
+            this.initMv()
+            // #endif
+
             // #ifdef H5
             this.ui.showLoading()
-            const data = await publicGet(localStorage.getItem('ssUrl'))
+            const data = await publicGet(`getPlayInfo.php?url=${localStorage.getItem('ssUrl')}`)
             uni.hideLoading()
             this.address = data.address
             this.descRes = data.descRes
             this.director = data.director
             this.img = data.img
+            this.people = data.people
+            this.playHref = data.playHref
             this.status = data.status
             this.time = data.time
             this.title = data.title
@@ -114,13 +121,46 @@
         methods: {
             NavChange(e) {
                 this.$store.state.indexPage = e.currentTarget.dataset.cur
+
                 this.router.push({name: 'mvHome'})
+
                 this.PageCur = e.currentTarget.dataset.cur
+                // console.log(e.currentTarget.dataset.cur)
             },
             bfUrl() {
+                // #ifdef MP-WEIXIN
+                this.ui.setStorage('ssPlay', this.playHref)
+                // #endif
+				// #ifdef H5
+                localStorage.setItem('ssPlay', this.playHref)
+                // #endif
                 this.router.push({name: 'moviePlay'})
             },
+            initMv() {
+                this.ui.yunFun('getUrlData', {
+                    url: `http://123.0t038.cn/jin-61/wfd/515love/api/getPlayInfo.php?url=${uni.getStorageSync('ssUrl')}`
+                }, (res) => {
+                    console.log('得到的数据', res.result.body)
+                    const data = JSON.parse(res.result.body)
+                    this.address = data.address
+                    this.descRes = data.descRes
+                    this.director = data.director
+                    this.img = data.img
+                    this.people = data.people
+                    this.playHref = data.playHref
+                    this.status = data.status
+                    this.time = data.time
+                    this.title = data.title
+                    this.type = data.type
+                }, true, '加载中', (err) => {
+                    uni.hideLoading()
+                    this.ui.showToast('网络不稳定，请求超时', 'none', 3000)
+                    this.initMv()
+                    console.log(err)
+                })
+            },
         },
+
         computed: {
             ...mapState(['ssUrl', 'indexPage', 'ssPlay']),
         },

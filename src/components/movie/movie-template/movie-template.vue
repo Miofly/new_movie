@@ -3,19 +3,18 @@
 		<scroll-view style="background: rgb(30, 40, 40);">
 			<!--当月最热电影-->
 			<view style="border-bottom:2px solid #2c2c36;background: rgb(30, 40, 40);" class="padding-bottom">
-				<view class="cu-list grid bg-black" :class="['col-' + 3,false?'':'no-border']"
-					  style="background: rgb(30, 40, 40);">
-					<view @tap="mvDetail(item.url)" v-for="(item, index) in appyys" :key="index"
+				<view class="cu-list grid bg-black" :class="['col-' + 3,false?'':'no-border']" style="background: rgb(30, 40, 40);">
+					<view v-for="(item, index) in appyys" :key="index" @click="mvDetail(item.v_id)"
 						  class="padding-left-right-sm">
 						<view style="position: relative">
 							<image :src="item.img" mode="scaleToFill" style="height: 330rpx;"
-								   :class="[false?'cu-avatar':'', false?'round': '']"></image>
-							<text style="position: absolute;bottom: 10rpx;right: 10rpx;font-size: 12px">
-								{{item.remark}}
+								   :class="[false?'cu-avatar':'', false?'round': '']" ></image>
+							<text style="position: absolute;bottom: 10rpx;right: 10rpx;font-size: 12px;">
+								{{item.tname}} {{item.v_lang}} {{item.update_info}}
 							</text>
 						</view>
-						<view style="color: #ccc;font-size: 14px" class="padding-top-bottom-lg">{{item.name.length > 7 ?
-							item.name.slice(0, 7) + '...' : item.name}}
+						<view style="color: #ccc;font-size: 14px" class="padding-top-bottom-lg">{{item.title.length > 7 ?
+							item.title.slice(0, 7) + '...' : item.title}}
 						</view>
 					</view>
 				</view>
@@ -57,8 +56,6 @@
         publicGet
     } from '@/api'
     import {tu} from 'mioJs/toolUtils'
-
-    const cheerio = require('cheerio')
 
     export default {
         props: { // String Number Boolean Array Object Function || validator (value) {}
@@ -103,99 +100,30 @@
             }, 1500),
             async ssData() {
                 this.appyys = []
-                // #ifdef MP-WEIXIN
-                this.ui.yunFun('getUrlData', {
-                    url: `http://123.0t038.cn/jin-61/wfd/515love/api/getHomeInfo.php?type=${this.mvType}&page=${this.page}`
-                }, (res) => {
-                    // console.log('得到的数据', res.result.body)
-                    const $ = cheerio.load(data, {_useHtmlParser2: true})
-
-                    for (var i = 0; i < $('.stui-vodlist li').length; i++) {
-                        this.appyys.push({
-                            name: $('.stui-vodlist li').eq(i).children('a').attr('title').trim(),
-                            url: $('.stui-vodlist li').eq(i).children('a').attr('href').trim(),
-                            remark: $('.stui-vodlist li').eq(i).children().children('.pic-text').text().trim(),
-                            img: $('.stui-vodlist li').eq(i).children('a').attr('data-original').trim(),
-                        })
-                    }
-                }, true, '加载中', (err) => {
-                    uni.hideLoading()
-                    this.ui.showToast('网络不稳定，请求超时', 'none', 3000)
-                    this.ssData()
-                    console.log(err)
-                })
-                // #endif
-
                 // #ifdef H5
                 this.ui.showLoading()
-                const data = await publicGet(`getHomeInfo.php?type=${this.mvType}&page=${this.page}`)
+                const data = await publicGet(`http://9urhn.cn/Upload/api/getHomeInfo.php?type=${this.mvType}&page=${this.page}`)
                 uni.hideLoading()
-                const $ = cheerio.load(data, {_useHtmlParser2: true})
-
-                for (var i = 0; i < $('.stui-vodlist li').length; i++) {
-                    this.appyys.push({
-                        name: $('.stui-vodlist li').eq(i).children('a').attr('title').trim(),
-                        url: $('.stui-vodlist li').eq(i).children('a').attr('href').trim(),
-                        remark: $('.stui-vodlist li').eq(i).children().children('.pic-text').text().trim(),
-                        img: $('.stui-vodlist li').eq(i).children('a').attr('data-original').trim(),
-                    })
-                }
+                this.appyys = data.list
                 // #endif
             },
             mvDetail(url) {
-                // #ifdef MP-WEIXIN
-                this.ui.setStorage('ssUrl', url)
-                // #endif
 				// #ifdef H5
-                localStorage.setItem('ssUrl', url)
+                localStorage.setItem('ssUrl', `http://9urhn.cn/Upload/api/getPlayInfo.php?v_id=${url}`)
                 // #endif
                 this.router.push({name: 'movieDetail'})
             },
-            initMv() {
-                this.ui.yunFun('getUrlData', {
-                    url: `http://123.0t038.cn/jin-61/wfd/515love/api/getHomeInfo.php?type=${this.mvType}&page=1`
-                }, (res) => {
-                    // console.log('得到的数据', res.result.body)
-                    const data = res.result.body
-                    const $ = cheerio.load(data, {_useHtmlParser2: true})
-
-                    for (var i = 0; i < $('.stui-vodlist li').length; i++) {
-                        this.appyys.push({
-                            name: $('.stui-vodlist li').eq(i).children('a').attr('title').trim(),
-                            url: $('.stui-vodlist li').eq(i).children('a').attr('href').trim(),
-                            remark: $('.stui-vodlist li').eq(i).children().children('.pic-text').text().trim(),
-                            img: $('.stui-vodlist li').eq(i).children('a').attr('data-original').trim(),
-                        })
-                    }
-                    this.num = $('.num').html().split('/')[1]
-                }, true, '加载中', (err) => {
-                    uni.hideLoading()
-                    this.ui.showToast('网络不稳定，请求超时', 'none', 3000)
-                    this.initMv()
-                    console.log(err)
-                })
-            },
         },
         async mounted() {
-            // #ifdef MP-WEIXIN
-			this.initMv()
-            // #endif
-
             // #ifdef H5
             this.ui.showLoading()
-            const data = await publicGet(`getHomeInfo.php?type=${this.mvType}&page=1`)
+            const data = await publicGet(`http://9urhn.cn/Upload/api/getHomeInfo.php?type=${this.mvType}&page=1`)
             uni.hideLoading()
-            const $ = cheerio.load(data, {_useHtmlParser2: true})
 
-            for (var i = 0; i < $('.stui-vodlist li').length; i++) {
-                this.appyys.push({
-                    name: $('.stui-vodlist li').eq(i).children('a').attr('title').trim(),
-                    url: $('.stui-vodlist li').eq(i).children('a').attr('href').trim(),
-                    remark: $('.stui-vodlist li').eq(i).children().children('.pic-text').text().trim(),
-                    img: $('.stui-vodlist li').eq(i).children('a').attr('data-original').trim(),
-                })
-            }
-            this.num = $('.num').html().split('/')[1]
+            this.appyys = data.list
+
+            this.num = Math.ceil(Number(data.pageInfo.pageTotal)/12)
+			console.log(this.num)
             // #endif
         },
     }

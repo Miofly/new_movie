@@ -74,11 +74,29 @@
             // 执行搜索
             doSearch: tu.throttle(async function () {
                 console.log(uni.getStorageSync('sskey'))
+                // #ifdef MP-WEIXIN
+                if (uni.getStorageSync('sskey') != '') {
+					this.ui.yunFun('getUrlData', {
+					    url: `http://123.0t038.cn/jin-61/wfd/515love/api/getDataInfo.php?keyword=${uni.getStorageSync('sskey')}&page=${this.$store.state.sspage}`
+					}, (res) => {
+					    const data = res.result.body
+						console.log(data)
+                        this.ui.setStorage('ssData', data)
+                        // this.router.push('/pages/index/movie/mvSearch')
+					}, true, '加载中', (err) => {
+					    uni.hideLoading()
+					    this.ui.showToast('网络不稳定，请求超时', 'none', 3000)
+					    this.initMv()
+					    console.log(err)
+					})
+                }
+                // #endif
+
                 // #ifdef H5
                 if (localStorage.getItem('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://9urhn.cn/Upload/api/getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
                     localStorage.setItem('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
@@ -87,12 +105,30 @@
                 // #endif
             }, 2000),
             doSearchTwo: tu.throttle(async function () {
+                // #ifdef MP-WEIXIN
+                this.$store.state.sspage = 1
+                if (uni.getStorageSync('sskey') != '') {
+                    this.ui.yunFun('getUrlData', {
+                        url: `http://123.0t038.cn/jin-61/wfd/515love/api/getDataInfo.php?keyword=${encodeURI(uni.getStorageSync('sskey'))}&page=${this.$store.state.sspage}`
+                    }, (res) => {
+                        const data = res.result.body
+						console.log(data)
+                        this.ui.setStorage('ssData', data)
+                        this.router.push('/pages/index/movie/mvSearch')
+                    }, true, '加载中', (err) => {
+                        uni.hideLoading()
+                        this.ui.showToast('网络不稳定，请求超时', 'none', 3000)
+                        this.initMv()
+                        console.log(err)
+                    })
+                }
+                // #endif
                 // #ifdef H5
                 this.$store.state.sspage = 1
                 if (localStorage.getItem('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://9urhn.cn/Upload/api/getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
                     localStorage.setItem('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
