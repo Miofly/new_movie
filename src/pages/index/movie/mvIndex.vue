@@ -1,7 +1,7 @@
 <template>
 	<view style="height: 100%;background: rgb(30, 40, 40);color: white">
 		<!--头部搜索-->
-		<scroll-view style="background: rgb(30, 40, 40);">
+		<scroll-view style="background: rgb(30, 40, 40);" @scroll="myscroll">
 			<!--#ifdef H5-->
 			<!--最新电影-->
 			<view style="border-bottom:2px solid #2c2c36;" class="padding-bottom">
@@ -11,17 +11,26 @@
 
 				<view class="cu-list grid bg-black" :class="['col-' + 3,gridBorder?'':'no-border']">
 					<view v-for="(item, index) in appyys" :key="index" @click="mvDetail(item.v_id)"
-						  class="padding-left-right-sm">
-						<view style="position: relative">
-							<image :src="item.img" mode="scaleToFill" style="height: 330rpx;"
-								   :class="[false?'cu-avatar':'', false?'round': '']"></image>
-							<text style="position: absolute;bottom: 10rpx;right: 10rpx;font-size: 12px;">
+						  class="padding-left-right-sm" ss>
+						<view style="position: relative;height: 100%">
+							<!--<image v-if="loadImg&&!isLoadError"-->
+							<!--v-show="showImg" :src="item.img" mode="scaleToFill" style="height: 330rpx;"-->
+							<!--:class="[false?'cu-avatar':'', false?'round': '']" @load="handleImgLoad"-->
+							<!--@error="handleImgError"></image>-->
+
+							<imgLoad style="height: 180px" :scroll-top="scrollTop" :image-src="item.img"
+									 loading-mode="spin-circle"></imgLoad>
+
+							<text style="position: absolute;bottom:60rpx;right: 10rpx;font-size: 12px;">
 								{{item.tname}} {{item.v_lang}} {{item.update_info}}
 							</text>
+							<view style="color: #ccc;font-size: 14px;" class="padding-top-bottom-lg">{{item.title.length
+								> 7
+								?
+								item.title.slice(0, 7) + '...' : item.title}}
+							</view>
 						</view>
-						<view style="color: #ccc;font-size: 14px" class="padding-top-bottom-lg">{{item.title.length > 7 ?
-							item.title.slice(0, 7) + '...' : item.title}}
-						</view>
+
 					</view>
 				</view>
 			</view>
@@ -37,7 +46,6 @@
     } from '@/api'
     import {mapState} from 'vuex'
 
-    const cheerio = require('cheerio')
 
     export default {
         data() {
@@ -49,10 +57,27 @@
                 appyysThree: [],
                 appyysFour: [],
                 url: '',
-                timer: null
+                timer: null,
+                scrollTop: 0
             }
         },
+        onPageScroll({scrollTop}) {
+            console.log(scrollTop)
+            // 传入scrollTop值并触发所有easy-loadimage组件下的滚动监听事件
+            this.scrollTop = scrollTop
+        },
         methods: {
+            myscroll({scrollTop}) {
+                console.log(1)
+                console.log(scrollTop)
+                // 传入scrollTop值并触发所有easy-loadimage组件下的滚动监听事件
+                this.scrollTop = scrollTop
+            },
+            handleImgLoad(e) {
+                // console.log('success');
+                this.showImg = true
+                // this.$nextTick(function(){
+            },
             getStorage() {
                 var that = this
                 uni.getStorage({
@@ -70,8 +95,12 @@
                 })
             },
             mvDetail(url) {
-                localStorage.setItem('ssUrl', `http://9urhn.cn/Upload/api/getPlayInfo.php?v_id=${url}`)
-				this.router.push({name: 'movieDetail'})
+                localStorage.setItem('ssUrl', `getPlayInfo.php?v_id=${url}`)
+                this.router.push({name: 'movieDetail'})
+            },
+            handleImgError(e) {
+                // console.log('fail');
+                this.isLoadError = true
             },
         },
         async mounted() {
@@ -80,7 +109,7 @@
             localStorage.removeItem('sskey')
 
             this.ui.showLoading()
-            const data = await publicGet('http://9urhn.cn/Upload/api/getHomeInfo.php?page=1&type=1')
+            const data = await publicGet('getHomeInfo.php?page=1&type=1')
             this.appyys = data.list
             uni.hideLoading()
             // #endif
@@ -98,5 +127,11 @@
 
 	.cu-list.grid.no-border {
 		padding: 0 !important;
+	}
+
+	.loadfail-img {
+		height: 30px;
+		background: url('@/static/images/common/loadfail.png') no-repeat center;
+		background-size: 50%;
 	}
 </style>

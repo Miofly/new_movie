@@ -78,7 +78,7 @@
                 if (localStorage.getItem('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://9urhn.cn/Upload/api/getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
                     localStorage.setItem('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})
@@ -92,7 +92,7 @@
                 if (localStorage.getItem('sskey') != '') {
                     // this.$emit('parentFun', this.keyword.trim())
                     this.ui.showLoading()
-                    const data = await publicGet(`http://9urhn.cn/Upload/api/getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
+                    const data = await publicGet(`getDataInfo.php?keyword=${localStorage.getItem('sskey')}&page=${this.$store.state.sspage}`)
                     localStorage.setItem('ssData', JSON.stringify(data))
                     uni.hideLoading()
                     // this.$Router.push({name: 'mvSearch', params: {key: '1'}})

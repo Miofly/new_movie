@@ -180,7 +180,7 @@
                 uni.setStorageSync('ssUrl', url)
                 // #endif
                 // #ifdef H5
-                localStorage.setItem('ssUrl', `http://9urhn.cn/Upload/api/getPlayInfo.php?v_id=${url}`)
+                localStorage.setItem('ssUrl', `getPlayInfo.php?v_id=${url}`)
                 // #endif
                 this.router.push({name: 'movieDetail'})
             },

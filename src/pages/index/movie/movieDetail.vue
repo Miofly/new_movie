@@ -4,7 +4,7 @@
 		<movie-header ref="head"></movie-header>
 		<view class="padding" style="background: rgb(30, 40, 40);">
 			<view class="fl" style="width: 30%">
-				<image :src="img" mode="scaleToFill" style="height: 350rpx;width: 240rpx"
+				<image :src="img" mode="scaleToFill" style="height: 350rpx;width: 240rpx" alt="1"
 					   :class="[false?'cu-avatar':'', false?'round': '']"></image>
 			</view>
 			<view class="fl margin-left" style="width: 65%">
@@ -128,5 +128,9 @@
 </script>
 
 <style>
-
+	.loadfail-img{
+		height: 100%;
+		background: url('/static/images/common/loadfail.png') no-repeat center;
+		background-size: 50%;
+	}
 </style>

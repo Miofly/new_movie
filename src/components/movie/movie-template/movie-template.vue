@@ -3,18 +3,22 @@
 		<scroll-view style="background: rgb(30, 40, 40);">
 			<!--当月最热电影-->
 			<view style="border-bottom:2px solid #2c2c36;background: rgb(30, 40, 40);" class="padding-bottom">
-				<view class="cu-list grid bg-black" :class="['col-' + 3,false?'':'no-border']" style="background: rgb(30, 40, 40);">
+				<view class="cu-list grid bg-black" :class="['col-' + 3,false?'':'no-border']"
+					  style="background: rgb(30, 40, 40);">
 					<view v-for="(item, index) in appyys" :key="index" @click="mvDetail(item.v_id)"
 						  class="padding-left-right-sm">
 						<view style="position: relative">
-							<image :src="item.img" mode="scaleToFill" style="height: 330rpx;"
-								   :class="[false?'cu-avatar':'', false?'round': '']" ></image>
-							<text style="position: absolute;bottom: 10rpx;right: 10rpx;font-size: 12px;">
+							<imgLoad style="height: 180px" :scroll-top="scrollTop" :image-src="item.img"
+									 loading-mode="spin-circle"></imgLoad>
+
+							<text style="position: absolute;bottom:60rpx;right: 10rpx;font-size: 12px;">
 								{{item.tname}} {{item.v_lang}} {{item.update_info}}
 							</text>
-						</view>
-						<view style="color: #ccc;font-size: 14px" class="padding-top-bottom-lg">{{item.title.length > 7 ?
-							item.title.slice(0, 7) + '...' : item.title}}
+							<view style="color: #ccc;font-size: 14px;" class="padding-top-bottom-lg">{{item.title.length
+								> 7
+								?
+								item.title.slice(0, 7) + '...' : item.title}}
+							</view>
 						</view>
 					</view>
 				</view>
@@ -27,22 +31,22 @@
 				</button>
 				<button @tap="beforePgae" class="cu-btn margin-left-sm" style="background: rgb(46, 46, 58);color: #ccc;"
 						:class="[['sm', 'lg', ''][2], false ? 'round' : '', true ? 'shadow' : '', false ? 'block' : '']">
-					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled=false></text>
+					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled="false"></text>
 					上一页
 				</button>
 				<button class="cu-btn margin-left-sm" style="background: rgb(46, 46, 58);color: #ccc;"
 						:class="[['sm', 'lg', ''][2], false ? 'round' : '', true ? 'shadow' : '', false ? 'block' : '']">
-					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled=false></text>
+					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled="false"></text>
 					{{page}} / {{num}}
 				</button>
 				<button @tap="nextPage" class="cu-btn margin-left-sm" style="background: rgb(46, 46, 58);color: #ccc;"
 						:class="[['sm', 'lg', ''][2], false ? 'round' : '', true ? 'shadow' : '', false ? 'block' : '']">
-					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled=false></text>
+					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled="false"></text>
 					下一页
 				</button>
 				<button @tap="lastPage" class="cu-btn margin-left-sm" style="background: rgb(46, 46, 58);color: #ccc;"
 						:class="[['sm', 'lg', ''][2], false ? 'round' : '', true ? 'shadow' : '', false ? 'block' : '']">
-					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled=false></text>
+					<text v-if="false" class="fa fa-wechat padding-right-twenty" :disabled="false"></text>
 					尾页
 				</button>
 			</view>
@@ -71,7 +75,13 @@
                 appyys: [],
                 num: 1,
                 page: 1,
+                scrollTop: 0
             }
+        },
+        onPageScroll({scrollTop}) {
+            console.log(scrollTop)
+            // 传入scrollTop值并触发所有easy-loadimage组件下的滚动监听事件
+            this.scrollTop = scrollTop
         },
         methods: {
             beforePgae: tu.throttle(function () {
@@ -102,14 +112,14 @@
                 this.appyys = []
                 // #ifdef H5
                 this.ui.showLoading()
-                const data = await publicGet(`http://9urhn.cn/Upload/api/getHomeInfo.php?type=${this.mvType}&page=${this.page}`)
+                const data = await publicGet(`getHomeInfo.php?type=${this.mvType}&page=${this.page}`)
                 uni.hideLoading()
                 this.appyys = data.list
                 // #endif
             },
             mvDetail(url) {
-				// #ifdef H5
-                localStorage.setItem('ssUrl', `http://9urhn.cn/Upload/api/getPlayInfo.php?v_id=${url}`)
+                // #ifdef H5
+                localStorage.setItem('ssUrl', `getPlayInfo.php?v_id=${url}`)
                 // #endif
                 this.router.push({name: 'movieDetail'})
             },
@@ -117,13 +127,13 @@
         async mounted() {
             // #ifdef H5
             this.ui.showLoading()
-            const data = await publicGet(`http://9urhn.cn/Upload/api/getHomeInfo.php?type=${this.mvType}&page=1`)
+            const data = await publicGet(`getHomeInfo.php?type=${this.mvType}&page=1`)
             uni.hideLoading()
 
             this.appyys = data.list
 
-            this.num = Math.ceil(Number(data.pageInfo.pageTotal)/12)
-			console.log(this.num)
+            this.num = Math.ceil(Number(data.pageInfo.pageTotal) / 12)
+            console.log(this.num)
             // #endif
         },
     }

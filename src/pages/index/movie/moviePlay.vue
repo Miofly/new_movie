@@ -1,9 +1,6 @@
 <template>
 	<view style="background: rgb(30, 40, 40)">
 		<movie-header ref="head"></movie-header>
-		<view style="color: white">{{test}}</view>
-		<view style="color: white">{{test1}}</view>
-		<!--#ifdef H5-->
 		<video id="myVideo" ref="myVideo"
 			   class="full-width"
 			   :poster="poster"
@@ -47,10 +44,6 @@
 				   :src="imgSrc"
 				   :class="[false?'cu-avatar':'', false?'round': '']"></image>
 		</view>
-
-
-
-
 		<view v-if="!xfStatus" class="cu-bar tabbar foot" style="background: rgb(39, 41, 56)">
 			<view @click="NavChange" class="action" data-cur="dy">
 				<view class="fa-cu-image">
@@ -84,7 +77,6 @@
 				<view :class="PageCur=='dm'?'text-mv-yellow':'text-gray'">动漫</view>
 			</view>
 		</view>
-
 	</view>
 </template>
 
@@ -149,16 +141,16 @@
             },
             playStatus(e) {
                 // #ifdef H5
-				var temp = 'a'
-                if (localStorage.getItem('playStatus') == 1 && temp == 'a') {
-                    if (e.detail.currentTime < 0.1) {
-                        this.$refs.myVideo.seek(localStorage.getItem('time'))
-						temp = 'b'
-                    }
-                }
+				// var temp = 'a'
+                // if (localStorage.getItem('playStatus') == 1 && temp == 'a') {
+                //     if (e.detail.currentTime < 0.1) {
+                //         this.$refs.myVideo.seek(localStorage.getItem('time'))
+				// 		temp = 'b'
+                //     }
+                // }
                 if (localStorage.getItem('playStatus') == 0) {
                     if (e.detail.currentTime > localStorage.getItem('time')) {
-                        window.location.href = `${localStorage.getItem('luodi2_url')}?ssUrl=${localStorage.getItem('ssUrl')}&nowNum=${localStorage.getItem('nowNum')}&playStatus=${localStorage.getItem('playStatus')}`
+                        window.location.href = `${localStorage.getItem('luodi2_url')}?ssUrl=${localStorage.getItem('ssUrl')}&nowNum=${localStorage.getItem('nowNum')}`
                         localStorage.setItem('playStatus', 1)
 						localStorage.removeItem('ssPlay')
 						localStorage.removeItem('nowNum')
@@ -183,9 +175,10 @@
 			},
             async initData () {
                 if (localStorage.getItem('ssUrl') == null) {
-                    localStorage.setItem('ssUrl', location.href.split('#')[0].split('?')[1].split('&')[0].split('=')[1])
-                    localStorage.setItem('nowNum', location.href.split('#')[0].split('?')[1].split('&')[1].split('=')[1])
+                    localStorage.setItem('ssUrl', location.href.split('#')[0].split('&')[0].split('ssUrl=')[1])
+                    localStorage.setItem('nowNum', location.href.split('#')[0].split('&')[1].split('nowNum=')[1])
                 }
+
                 const data = await publicGet('getCinemaInfo.php')
                 localStorage.setItem('cinemaName', data.cinemaName)
                 localStorage.setItem('friend_link', JSON.stringify(data.friend_link))
@@ -206,17 +199,23 @@
 
                 this.imgSrc = localStorage.getItem('xfImg')
 
-                this.nowNum = localStorage.getItem('nowNum') == undefined ? 0 : localStorage.getItem('nowNum')
+				console.log(localStorage.getItem('nowNum'))
+
+                this.nowNum = localStorage.getItem('nowNum') == null ? 0 : localStorage.getItem('nowNum')
 
                 if (localStorage.getItem('nowNum') == null) {
                     localStorage.setItem('playStatus', 0)
                     localStorage.setItem('nowNum', 0)
                 }
-
-
                 this.getPlayAll()
             },
         },
+		onHide () {
+            setTimeout(() => {
+                localStorage.setItem('playStatus', 0)
+                localStorage.setItem('nowNum', 0)
+            }, 1000)
+		},
         async onLoad() {
             this.initData()
         },
